@@ -57,9 +57,9 @@ async def start(ctx):
   a = message.content
 
   if a.lower() == "yes" or a.lower() == "y":
-    print("Yay\n")
+    await ctx.send("Yay\n")
   else:
-    print("Oof\n")
+    await ctx.send("Oof\n")
 
 
 TOKEN=os.getenv("BOT_TOKEN")
