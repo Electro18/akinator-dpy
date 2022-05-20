@@ -45,7 +45,8 @@ async def start(ctx):
   q = aki.start_game(language=lang, child_mode=child)
 
   while aki.progression <= 80:
-    await ctx.send(q)
+    em=discord.Embed(title=q, description=f"Progress: {aki.progression}\n\nStep: {aki.step}", color=discord.Color.random())
+    await ctx.send(embed=em)
     message = await client.wait_for("message", check=check)
     a = message.content
 
