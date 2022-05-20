@@ -72,5 +72,27 @@ async def start(ctx):
     await ctx.send("Oof\n")
 
 
+
+@client.command()
+async def language(ctx, lang=None):
+  if lang == None:
+    await ctx.send("Please state 1 of the following languages: `en`,`ar`,`cn`,`de`,`es`,`fr`,`il`,`it`,`jp`,`kr`,`pl`,`nl`,`pt`,`ru`,`tr`,`id`.")
+
+  with open("config/users.json", "r") as f:
+    data = json.load(f)
+  if str(ctx.author.id) not in data:
+    create_setting_u(ctx=ctx)
+
+  with open("config/users.json", "r") as f:
+    data = json.load(f)
+
+  data[str(ctx.author.id)]["lang"] = lang
+
+  with open("config/users.json", "w") as f:
+    json.dump(data, f)
+    
+  await ctx.send(f"Set lang to {lang}!")
+
+
 TOKEN=os.getenv("BOT_TOKEN")
 client.run(TOKEN)
