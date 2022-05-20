@@ -24,7 +24,7 @@ async def start(ctx, language=None, child_mode=True):
 
   q = aki.start_game(language,child_mode)
 
-  while aki.progression <= 80:
+  while aki.progression <= 85:
     a = ""
     em=discord.Embed(title=f"Question {aki.step}", description=f"**{q}**\nPick on option.", color=discord.Color.from_rgb(255,245,0))
     class options(discord.ui.View):
@@ -70,9 +70,7 @@ async def start(ctx, language=None, child_mode=True):
         for child in self.children:
           child.disabled = True
         await interaction.response.edit_message(view=self)
-    await ctx.send(embed=em)
-    message = await client.wait_for("message", check=check)
-    a = message.content
+    await ctx.send(embed=em, view=options())
 
     if a.lower() == "b" or a.lower() == "back":
       try:
