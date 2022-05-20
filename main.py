@@ -43,7 +43,7 @@ async def start(ctx):
     return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
   q = aki.start_game(language=lang, child_mode=child)
-  await ctx.send(lang)
+  await ctx.send(lang + "i")
 
   while aki.progression <= 80:
     em=discord.Embed(title=q, description=f"Progress: {aki.progression}\n\nStep: {aki.step}", color=discord.Color.random())
