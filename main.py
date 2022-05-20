@@ -21,11 +21,16 @@ async def start(ctx):
   with open("config/users.json", "r") as f:
     data = json.load(f)
   if ctx.author.id not in data:
+    print("no")
     data[ctx.author.id] = {}
     data[ctx.author.id]["child"] = True
     data[ctx.author.id]["lang"] = "en"
-    with open("config/users.json", "w") as f:
-      json.dump(data, f)
+
+  with open("config/users.json", "w") as f:
+    json.dump(data, f)
+
+  with open("config/users.json", "r") as f:
+    data = json.load(f)
   
   child = data[ctx.author.id]["child"]
   lang = data[ctx.author.id]["lang"]
@@ -33,7 +38,7 @@ async def start(ctx):
   def check(m):
     return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
-  q = aki.start_game()
+  q = aki.start_game(language=lang, child_mode=child)
 
   while aki.progression <= 80:
     await ctx.send(q)
