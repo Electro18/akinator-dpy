@@ -16,19 +16,23 @@ async def on_ready():
   print('------')
 
 
+def create_setting_u(ctx):
+  with open("config/users.json", "r") as f:
+    data = json.load(f)
+
+  data[ctx.author.id] = {}
+  data[ctx.author.id]["child"] = True
+  data[ctx.author.id]["lang"] = "en"
+
+  with open("config/users.json", "w") as f:
+    json.dump(data, f)
+
 @client.command()
 async def start(ctx):
   with open("config/users.json", "r") as f:
     data = json.load(f)
   if ctx.author.id not in data:
-    print("no")
-    data[ctx.author.id] = {}
-    data[ctx.author.id]["child"] = True
-    data[ctx.author.id]["lang"] = "en"
-
-  with open("config/users.json", "w") as f:
-    json.dump(data, f)
-
+    create_setting_u(ctx=ctx)
   with open("config/users.json", "r") as f:
     data = json.load(f)
   
