@@ -20,9 +20,9 @@ def create_setting_u(ctx):
   with open("config/users.json", "r") as f:
     data = json.load(f)
 
-  data[ctx.author.id] = {}
-  data[ctx.author.id]["child"] = True
-  data[ctx.author.id]["lang"] = "en"
+  data[str(ctx.author.id)] = {}
+  data[str(ctx.author.id)]["child"] = True
+  data[str(ctx.author.id)]["lang"] = "en"
 
   with open("config/users.json", "w") as f:
     json.dump(data, f)
@@ -31,18 +31,18 @@ def create_setting_u(ctx):
 async def start(ctx):
   with open("config/users.json", "r") as f:
     data = json.load(f)
-  if ctx.author.id not in data:
+  if str(ctx.author.id) not in data:
     create_setting_u(ctx=ctx)
   with open("config/users.json", "r") as f:
     data = json.load(f)
   
-  child = data[ctx.author.id]["child"]
-  lang = data[ctx.author.id]["lang"]
+  child = data[str(ctx.author.id)]["child"]
+  lang = data[str(ctx.author.id)]["lang"]
 
   def check(m):
     return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
-  q = aki.start_game()
+  q = aki.start_game(language=lang, child_mode=child)
 
   while aki.progression <= 80:
     em=discord.Embed(title=q, description=f"Progress: {aki.progression}\n\nStep: {aki.step}", color=discord.Color.random())
