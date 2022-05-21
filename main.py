@@ -25,7 +25,7 @@ async def start(ctx, language="en", child_mode=True):
   def check(m):
     return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
-  q = await aki.start_game(language,child_mode)
+  q = aki.start_game(language,child_mode)
   premessage = ctx.message
   playagain = True
 
@@ -42,16 +42,16 @@ async def start(ctx, language="en", child_mode=True):
   
       if a.lower() == "back" or a.lower() == "b":
         try:
-          q = await aki.back()
+          q = aki.back()
         except akinator.CantGoBackAnyFurther:
           await ctx.send("Go back to where? This is your first question. :face_with_monocle:")
           pass
       elif a.lower() == "stop" or a.lower() == "s":
-        await aki.close()
-        await ctx.message.reply("Stoped the game! =(")
+        aki.close()
+        await ctx.message.reply("Stoped the game!")
         pass
       else:
-        q = await aki.answer(a)
+        q = aki.answer(a)
   
     async with ctx.typing():
       await asyncio.sleep(0)
@@ -91,7 +91,6 @@ async def start(ctx, language="en", child_mode=True):
       else:
         playagain = False
         await another.reply("Ok =(")
-    await aki.close()
 
 
 
