@@ -71,6 +71,9 @@ async def start(ctx, language=None, child_mode=True):
         await interaction.response.edit_message(view=self)
     await ctx.send(embed=em, view=options())
 
+    while a == "":
+      pass
+
     if a.lower() == "b" or a.lower() == "back":
       try:
         q = aki.back()
