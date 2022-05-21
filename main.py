@@ -26,33 +26,35 @@ async def start(ctx, language=None, child_mode=True):
 
   while aki.progression <= 85:
     em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\nPick on option.", color=discord.Color.from_rgb(255,245,0))
-    class options(discord.ui.View):
-      placeholder = "Choose an Option!",
-      min_values = 1,
-      max_values = 1,
-      options = [
-        discord.SelectOption(
-          label="Yes"
-        ),
-        discord.SelectOption(
-          label="No"
-        ),
-        discord.SelectOption(
-          label="I don't know"
-        ),
-        discord.SelectOption(
-          label="Probably"
-        ),
-        discord.SelectOption(
-          label="Probably Not"
-        ),
-        discord.SelectOption(
-          label="Back"
-        ),
-        discord.SelectOption(
-          label="End Game"
-        ),
-      ]
+    class SelecAnswers(discord.ui.View):
+      @disord.ui.select(
+        placeholder = "Choose an Option!",
+        min_values = 1,
+        max_values = 1,
+        options = [
+          discord.SelectOption(
+            label="Yes"
+          ),
+          discord.SelectOption(
+            label="No"
+          ),
+          discord.SelectOption(
+            label="I don't know"
+          ),
+          discord.SelectOption(
+            label="Probably"
+          ),
+          discord.SelectOption(
+            label="Probably Not"
+          ),
+          discord.SelectOption(
+            label="Back"
+          ),
+          discord.SelectOption(
+            label="End Game"
+          ),
+        ]
+      )
       async def select_callback(self, select, interaction):
         select.disabled = True
         await interaction.response.edit_message(view=self)
@@ -66,7 +68,7 @@ async def start(ctx, language=None, child_mode=True):
         else:
           q = aki.answer(a)
 
-    await ctx.send(embed=em, view=options())
+    await ctx.send(embed=em, view=SelecAnswers())
         
 
   aki.win()
