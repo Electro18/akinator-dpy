@@ -27,7 +27,7 @@ async def start(ctx, language=None, child_mode=True):
   while aki.progression <= 85:
     em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\nPick on option.", color=discord.Color.from_rgb(255,245,0))
     class SelecAnswers(discord.ui.View):
-      @disord.ui.select(
+      @discord.ui.select(
         placeholder = "Choose an Option!",
         min_values = 1,
         max_values = 1,
