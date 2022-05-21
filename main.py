@@ -26,7 +26,7 @@ async def start(ctx, language="en", child_mode=True):
 
   while aki.progression <= 85:
     em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\n[yes (**y**) / no (**n**) / idk (**i**) / probably (**p**) / probably not (**pn**)]\n[back (**b**) / stop (**s**)]", color=discord.Color.from_rgb(255,245,0))
-    em.set_footer(text="Respond in 120 seconds!", icon_url=client.user.avatar_url)
+    em.set_footer(text="Respond in 120 seconds!")
     await ctx.message.reply(embed=em)
 
     message = message = await client.wait_for("message", check=check, timeout=120)
