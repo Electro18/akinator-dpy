@@ -59,6 +59,7 @@ async def start(ctx, language=None, child_mode=True):
         ]
       )
       async def select_callback(self, select, interaction):
+        a = select.values[0]
         if a.lower() == "back":
           try:
             q = aki.back()
