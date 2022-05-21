@@ -1,3 +1,4 @@
+from logging import PlaceHolder
 import discord
 from discord.ext import commands
 import akinator
@@ -24,64 +25,48 @@ async def start(ctx, language=None, child_mode=True):
   q = aki.start_game(language,child_mode)
 
   while aki.progression <= 85:
-    a = ""
     em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\nPick on option.", color=discord.Color.from_rgb(255,245,0))
     class options(discord.ui.View):
-      @discord.ui.button(label="Yes", style=discord.ButtonStyle.green, row=1)
-      async def button_callback1(self, button, interaction):
-        a = "y"
-        for child in self.children:
-          child.disabled = True
+      placeholder = "Choose an Option!",
+      min_values = 1,
+      max_values = 1,
+      options = [
+        discord.SelectOption(
+          label="Yes"
+        ),
+        discord.SelectOption(
+          label="No"
+        ),
+        discord.SelectOption(
+          label="I don't know"
+        ),
+        discord.SelectOption(
+          label="Probably"
+        ),
+        discord.SelectOption(
+          label="Probably Not"
+        ),
+        discord.SelectOption(
+          label="Back"
+        ),
+        discord.SelectOption(
+          label="End Game"
+        ),
+      ]
+      async def select_callback(self, select, interaction):
+        select.disabled = True
         await interaction.response.edit_message(view=self)
-      @discord.ui.button(label="No", style=discord.ButtonStyle.green, row=1)
-      async def button_callback2(self, button, interaction):
-        a = "n"
-        for child in self.children:
-          child.disabled = True
-        await interaction.response.edit_message(view=self)
-      @discord.ui.button(label="I dont know", style=discord.ButtonStyle.green, row=1)
-      async def button_callback3(self, button, interaction):
-        a = "idk"
-        for child in self.children:
-          child.disabled = True
-        await interaction.response.edit_message(view=self)
-      @discord.ui.button(label="Probably", style=discord.ButtonStyle.green, row=2)
-      async def button_callback4(self, button, interaction):
-        a = "p"
-        for child in self.children:
-          child.disabled = True
-        await interaction.response.edit_message(view=self)
-      @discord.ui.button(label="Probably Not", style=discord.ButtonStyle.green, row=2)
-      async def button_callback5(self, button, interaction):
-        a = "pn"
-        for child in self.children:
-          child.disabled = True
-        await interaction.response.edit_message(view=self)
-      @discord.ui.button(label="Back", style=discord.ButtonStyle.grey, row=3)
-      async def button_callback5(self, button, interaction):
-        a = "b"
-        for child in self.children:
-          child.disabled = True
-        await interaction.response.edit_message(view=self)
-      @discord.ui.button(label="END GAME", style=discord.ButtonStyle.red, row=3)
-      async def button_callback(self, button, interaction):
-        a = "dkmmdmdfkm"
-        for child in self.children:
-          child.disabled = True
-        await interaction.response.edit_message(view=self)
+        a = select.values[0]
+        if a.lower() == "back":
+          try:
+            q = aki.back()
+          except akinator.CantGoBackAnyFurther:
+            await ctx.send("Cannot go back!")
+            pass
+        else:
+          q = aki.answer(a)
+
     await ctx.send(embed=em, view=options())
-
-    while a == "":
-      pass
-
-    if a.lower() == "b" or a.lower() == "back":
-      try:
-        q = aki.back()
-      except akinator.CantGoBackAnyFurther:
-        await ctx.send("Cannot go back!")
-        pass
-    else:
-      q = aki.answer(a)
         
 
   aki.win()
