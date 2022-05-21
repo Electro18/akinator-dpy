@@ -24,8 +24,8 @@ async def start(ctx, language=None, child_mode=True):
   q = aki.start_game(language,child_mode)
 
   while aki.progression <= 85:
-    a = ""
-    em=discord.Embed(title=f"Question {aki.step}", description=f"**{q}**\nPick on option.", color=discord.Color.from_rgb(255,245,0))
+    a = "b"
+    em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\nPick on option.", color=discord.Color.from_rgb(255,245,0))
     class options(discord.ui.View):
       @discord.ui.button(label="Yes", style=discord.ButtonStyle.green, row=1)
       async def button_callback1(self, button, interaction):
