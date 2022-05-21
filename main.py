@@ -59,9 +59,6 @@ async def start(ctx, language=None, child_mode=True):
         ]
       )
       async def select_callback(self, select, interaction):
-        select.disabled = True
-        await interaction.response.edit_message(view=self)
-        a = select.values[0]
         if a.lower() == "back":
           try:
             q = aki.back()
@@ -71,6 +68,7 @@ async def start(ctx, language=None, child_mode=True):
         else:
           q = aki.answer(a)
         continueG = True
+        await interaction.delete_original_message()
 
     await ctx.send(embed=em, view=SelecAnswers())
         
