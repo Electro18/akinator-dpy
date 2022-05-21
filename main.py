@@ -26,7 +26,7 @@ async def start(ctx, language="en", child_mode=True):
 
   while aki.progression <= 85:
     em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\n[yes (**y**) / no (**n**) / idk (**i**) / probably (**p**) / probably not (**pn**)]\n[back (**b**) / stop (**s**)]", color=discord.Color.from_rgb(255,245,0))
-    em.set_footer(text="Respond in 120 seconds!")
+    em.set_footer(text="Respond in 120 seconds!", icon_url=client.user.avatar.url)
     await ctx.message.reply(embed=em)
 
     message = message = await client.wait_for("message", check=check, timeout=120)
@@ -48,7 +48,7 @@ async def start(ctx, language="en", child_mode=True):
   aki.win()
 
   em = discord.Embed(title=aki.first_guess["name"], description=f"Description: " + aki.first_guess["description"] + "\n\nRanking: " + aki.first_guess["ranking"], color = discord.Color.random())
-  em.set_footer(text="Am I correct? Respond with yes or no.", icon_url=client.user.avatar_url)
+  em.set_footer(text="Am I correct? Respond with yes or no.", icon_url=client.user.avatar.url)
   em.set_image(url=aki.first_guess["absolute_picture_path"])
   await ctx.send(embed=em)
 
