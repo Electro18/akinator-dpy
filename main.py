@@ -24,7 +24,10 @@ async def start(ctx, language=None, child_mode=True):
 
   q = aki.start_game(language,child_mode)
 
-  while aki.progression <= 85:
+  continueG = True
+
+  while aki.progression <= 85 and continueG == True:
+    continueG = False
     em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\nPick on option.", color=discord.Color.from_rgb(255,245,0))
     class SelecAnswers(discord.ui.View):
       @discord.ui.select(
@@ -67,6 +70,7 @@ async def start(ctx, language=None, child_mode=True):
             pass
         else:
           q = aki.answer(a)
+        continueG = True
 
     await ctx.send(embed=em, view=SelecAnswers())
         
