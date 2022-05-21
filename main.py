@@ -17,62 +17,32 @@ async def on_ready():
 
 
 @client.command()
-async def start(ctx, language=None, child_mode=True):
+async def start(ctx, language="en", child_mode=True):
 
   def check(m):
     return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
   q = aki.start_game(language,child_mode)
 
-  continueG = True
+  while aki.progression <= 85:
+    em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\n[yes (**y**) / no (**n**) / idk (**i**) / probably (**p**) / probably not (**pn**)]\n[back (**b**) / stop (**s**)]", color=discord.Color.from_rgb(255,245,0))
+    em.set_footer("Respond in 120 seconds!")
+    await ctx.message.reply(embed=em)
 
-  while aki.progression <= 85 and continueG == True:
-    continueG = False
-    em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\nPick on option.", color=discord.Color.from_rgb(255,245,0))
-    class SelecAnswers(discord.ui.View):
-      @discord.ui.select(
-        placeholder = "Choose an Option!",
-        min_values = 1,
-        max_values = 1,
-        options = [
-          discord.SelectOption(
-            label="Yes"
-          ),
-          discord.SelectOption(
-            label="No"
-          ),
-          discord.SelectOption(
-            label="I don't know"
-          ),
-          discord.SelectOption(
-            label="Probably"
-          ),
-          discord.SelectOption(
-            label="Probably Not"
-          ),
-          discord.SelectOption(
-            label="Back"
-          ),
-          discord.SelectOption(
-            label="End Game"
-          ),
-        ]
-      )
-      async def select_callback(self, interaction, select):
-        select.disabled = True
-        await interaction.response.edit_message(view=self)
-        a = select.values[0]
-        if a.lower() == "back":
-          try:
-            q = aki.back()
-          except akinator.CantGoBackAnyFurther:
-            await ctx.send("Cannot go back!")
-            pass
-        else:
-          q = aki.answer(a)
-        continueG = True
+    message = message = await client.wait_for("message", check=check, timeout=120)
+    a = message.content
 
-    await ctx.send(embed=em, view=SelecAnswers())
+    if a.lower() == "back" or a.lower() == "b":
+      try:
+        q = aki.back()
+      except akinator.CantGoBackAnyFurther:
+        await ctx.send("Cannot go back!")
+        pass
+    elif a.lower() == "stop" or a.lower() == "s":
+      await ctx.message.reply("Currently making this feautre so.... Sorry?")
+      pass
+    else:
+      q = aki.answer(a)
         
 
   aki.win()
@@ -83,7 +53,7 @@ async def start(ctx, language=None, child_mode=True):
   await ctx.send(embed=em)
 
   correct = message = await client.wait_for("message", check=check)
-  a = message.content
+  a = correct.content
 
   if a.lower() == "yes" or a.lower() == "y":
     await ctx.send("Yay\n")
