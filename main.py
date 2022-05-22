@@ -63,6 +63,8 @@ async def start(ctx, language="en", child_mode:bool = True):
         except  akinator.InvalidAnswerError:
           await premessage.reply("Hmm are you sure this is a valid answers? :thinking:")
           pass
+
+    await premessage.reply("🤔")
   
     async with ctx.typing():
       await asyncio.sleep(0)
