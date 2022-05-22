@@ -34,7 +34,7 @@ async def start(ctx, language="en", child_mode:bool = True):
   playagain = True
 
   while playagain == True:
-    while aki.progression <= 85:
+    while aki.progression <= 90:
       async with ctx.typing():
         await asyncio.sleep(0)
       em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\n[yes (**y**) / no (**n**) / idk (**i**) / probably (**p**) / probably not (**pn**)]\n[back (**b**) / stop (**s**)]", color=discord.Color.from_rgb(255,245,0))
@@ -70,7 +70,7 @@ async def start(ctx, language="en", child_mode:bool = True):
   
     em = discord.Embed(title=aki.first_guess["name"], description=aki.first_guess["description"] + "\nRanked: **#" + aki.first_guess["ranking"] + "**\n\n[yes (**y**) / no (**b**)]\n[back (**b**)]", color=discord.Color.from_rgb(255,245,0))
     em.set_image(url=aki.first_guess["absolute_picture_path"])
-    em.set_author(text="Is this your charecter?")
+    em.set_author(name="Is this your charecter?")
     await premessage.reply(embed=em)
   
     correct = message = await client.wait_for("message", check=check)
