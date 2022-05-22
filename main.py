@@ -18,14 +18,18 @@ async def on_ready():
 
 
 @client.command()
-async def start(ctx, language="en", child_mode=True):
+async def start(ctx, language="en", child_mode:bool = True):
+  
   async with ctx.typing():
     await asyncio.sleep(0)
 
   def check(m):
     return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
-  q = aki.start_game(language,child_mode)
+  try:
+    q = aki.start_game(language,child_mode)
+  except akinator.InvalidLanguageError:
+    await ctx.message.reply("Sorry I dont know how to speak that language! :sob:")
   premessage = ctx.message
   playagain = True
 
@@ -36,22 +40,29 @@ async def start(ctx, language="en", child_mode=True):
       em=discord.Embed(title=f"Question {aki.step + 1}", description=f"**{q}**\n[yes (**y**) / no (**n**) / idk (**i**) / probably (**p**) / probably not (**pn**)]\n[back (**b**) / stop (**s**)]", color=discord.Color.from_rgb(255,245,0))
       await premessage.reply(embed=em)
   
-      message = message = await client.wait_for("message", check=check, timeout=5)
-      premessage = message
-      a = message.content
+      try:
+        message = message = await client.wait_for("message", check=check, timeout=120)
+        premessage = message
+        a = message.content
+      except asyncio.exceptions.CancelledError:
+        await premessage.reply("Oof you took too long to respond. :alarm_clock:")
   
       if a.lower() == "back" or a.lower() == "b":
         try:
           q = aki.back()
         except akinator.CantGoBackAnyFurther:
-          await ctx.send("Go back to where? This is your first question. :face_with_monocle:")
+          await premessage.reply("Go back to where? This is your first question. :face_with_monocle:")
           pass
       elif a.lower() == "stop" or a.lower() == "s":
+        await premessage.reply("Stoped the game!")
         aki.close()
-        await ctx.message.reply("Stoped the game!")
         pass
       else:
-        q = aki.answer(a)
+        try:
+          q = aki.answer(a)
+        except  akinator.InvalidAnswerError:
+          await premessage.reply("Hmm are you sure this is a valid answers? :thinking:")
+          pass
   
     async with ctx.typing():
       await asyncio.sleep(0)
@@ -60,7 +71,7 @@ async def start(ctx, language="en", child_mode=True):
     em = discord.Embed(title=aki.first_guess["name"], description=aki.first_guess["description"] + "\nRanked: **#" + aki.first_guess["ranking"] + "**\n\n[yes (**y**) / no (**b**)]\n[back (**b**)]", color=discord.Color.from_rgb(255,245,0))
     em.set_image(url=aki.first_guess["absolute_picture_path"])
     em.set_author(text="Is this your charecter?")
-    await ctx.send(embed=em)
+    await premessage.reply(embed=em)
   
     correct = message = await client.wait_for("message", check=check)
     premessage = correct
@@ -79,7 +90,7 @@ async def start(ctx, language="en", child_mode=True):
         playagain = True
       else:
         playagain = False
-        await another.reply("Ok =(")
+        await premessage.reply("Ok =(")
     else:
       em = discord.Embed(title="Oof, Got one wrong... :disappointed:", description="Want me to try one more time? :upside_down:\n\n[yes (**y**) / no (**n**)", color=discord.Color.from_rgb(255,245,0))
       await premessage.reply(embed=em)
@@ -90,7 +101,7 @@ async def start(ctx, language="en", child_mode=True):
         playagain = True
       else:
         playagain = False
-        await another.reply("Ok =(")
+        await premessage.reply("Ok =(")
 
 
 
