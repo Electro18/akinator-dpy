@@ -88,7 +88,7 @@ async def start(ctx, language="en", child_mode:bool = True):
       another = message = await client.wait_for("message", check=check)
       a = another.content
       premessage = another
-      if a.lower == "y" or a.lower() == "yes":
+      if a.lower() == "y" or a.lower() == "yes":
         playagain = True
       else:
         playagain = False
