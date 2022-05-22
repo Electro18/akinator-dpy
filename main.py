@@ -81,7 +81,7 @@ async def start(ctx, language="en", child_mode:bool = True):
       await asyncio.sleep(0)
 
     if a.lower() == "yes" or a.lower() == "y":
-      em = discord.Embed(title="Yay, Got another one right!", description="Want to one more time? :upside_down:\n\n[yes (**y**) / no (**n**)", color=discord.Color.from_rgb(255,245,0))
+      em = discord.Embed(title="Yay, Got another one right!", description="Want to play one more time? :upside_down:\n\n[yes (**y**) / no (**n**)", color=discord.Color.from_rgb(255,245,0))
       await premessage.reply(embed=em)
       another = message = await client.wait_for("message", check=check)
       a = another.content
