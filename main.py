@@ -7,7 +7,7 @@ import asyncio
 
 
 intents = discord.Intents.all()
-client = commands.Bot(command_prefix=commands.when_mentioned_or('?'), intents=intents)
+client = commands.Bot(command_prefix=commands.when_mentioned_or('?'), intents=intents, case_insensitive=True, strip_after_prefix=True)
 
 aki = akinator.Akinator()
 
@@ -19,6 +19,8 @@ async def on_ready():
 
 @client.command()
 async def start(ctx, language="en", child_mode:bool = True):
+  premessage = ctx.message
+  playagain = True
   
   async with ctx.typing():
     await asyncio.sleep(0)
@@ -26,14 +28,12 @@ async def start(ctx, language="en", child_mode:bool = True):
   def check(m):
     return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
-  try:
-    q = aki.start_game(language,child_mode)
-  except akinator.InvalidLanguageError:
-    await ctx.message.reply("Sorry I dont know how to speak that language! :sob:")
-  premessage = ctx.message
-  playagain = True
-
   while playagain == True:
+    try:
+      q = aki.start_game(language,child_mode)
+    except akinator.InvalidLanguageError:
+      await ctx.message.reply("Sorry I dont know how to speak that language! :sob:")
+
     while aki.progression <= 90:
       async with ctx.typing():
         await asyncio.sleep(0)
