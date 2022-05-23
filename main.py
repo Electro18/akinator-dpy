@@ -21,14 +21,13 @@ async def on_ready():
 async def start(ctx, language="en", child_mode:bool = True):
   premessage = ctx.message
   playagain = True
-  
-  async with ctx.typing():
-    await asyncio.sleep(0)
 
   def check(m):
     return m.author.id == ctx.author.id and m.channel.id == ctx.channel.id
 
   while playagain == True:
+    async with ctx.typing():
+      await asyncio.sleep(0)
     try:
       q = aki.start_game(language,child_mode)
     except akinator.InvalidLanguageError:
