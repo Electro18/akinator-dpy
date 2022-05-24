@@ -4,13 +4,11 @@ from discord.ext import commands
 import akinator
 import os
 import asyncio
-import requests
-import json
 
 
 
 intents = discord.Intents.all()
-client = commands.Bot(command_prefix=commands.when_mentioned_or("aki"), intents=intents, case_insensitive=True, strip_after_prefix=True)
+client = commands.Bot(command_prefix=commands.when_mentioned_or("?"), intents=intents, case_insensitive=True, strip_after_prefix=True)
 
 aki = akinator.Akinator()
 
