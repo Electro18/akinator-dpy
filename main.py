@@ -8,15 +8,9 @@ import requests
 import json
 
 
-def get_prefix(client, message):
-  url = f"https://db-api.r4nd0md3v.repl.co/get/prefix/{message.guild.id}"
-  r = requests.get(url=url)
-  response = r.json()
-  if response["success"] == True:
-    return response["prefix"]
 
 intents = discord.Intents.all()
-client = commands.Bot(command_prefix=commands.when_mentioned_or(get_prefix), intents=intents, case_insensitive=True, strip_after_prefix=True)
+client = commands.Bot(command_prefix=commands.when_mentioned_or("aki"), intents=intents, case_insensitive=True, strip_after_prefix=True)
 
 aki = akinator.Akinator()
 
@@ -26,23 +20,6 @@ async def on_ready():
   print('------')
 
 
-@client.command()
-async def changeprefix(ctx, *, prefix=None):
-  if prefix == None:
-    prefix = ""
-  elif prefix.lower() == "reset":
-    url = f"https://db-api.r4nd0md3v.repl.co/reset/prefix/{ctx.guild.id}"
-    r = requests.get(url=url)
-    response = r.json()
-    if response["success"] == True:
-      await ctx.message.reply("Successfully reset the prefix!")
-
-  if prefix.lower() != "reset":
-    url = f"https://db-api.r4nd0md3v.repl.co/add/prefix/{ctx.guild.id}/{prefix}"
-    r = requests.get(url=url)
-    response = r.json()
-    if response["success"] == True:
-      await ctx.message.reply(f"Changed prefix to `{prefix}` successfully!")
 
 
 @client.command()
